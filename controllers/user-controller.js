@@ -87,10 +87,64 @@ const UserController = {
         }
     },
     updateUser: async (req, res) => {
-        res.send("Update");
+        const {id} = req.params;
+        const {email, name, dateOfBirth, bio, location} = req.body;
+        let filePath;
+        if(req.file && req.file.path) filePath = req.file.path;
+        if(id !== req.user.userId) return res.status(403).json({error: "Нет доступа"});
+        try {
+            if(email) {
+                const existUser = await prisma.user.findFirst({
+                    where: {email}
+                })
+                if(existUser && existUser.id !== id) {
+                    return res.status(400).json({error: "Почта уже используется"});
+                }
+            }
+            const user = await prisma.user.update({
+                where: {id},
+                data: {
+                    email: email || undefined,
+                    name: name || undefined,
+                    avatarUrl: filePath ? `/${filePath}` : undefined,
+                    dateOfBirth: dateOfBirth || undefined,
+                    bio: bio || undefined,
+                    location: location || undefined,
+                }
+            })
+            res.json(user);
+        } catch (error) {
+            console.error("Update user error", error);
+            res.status(500).json({error: "Enternal Server Error"});
+        }
     },
     current: async (req, res) => {
-        res.send("Current");
-    },
+        try {
+            const user = await prisma.user.findUnique({
+                where: {
+                    id: req.user.userId
+                },
+                include: {
+                    followers: {
+                        include: {
+                            follower: true
+                        }
+                    },
+                    following: {
+                        include: {
+                            following: true
+                        }
+                    }
+                }
+            });
+
+            if(!user) return res.status(400).json({error: "Не удалось никого найти пользователя"});
+
+            res.json(user);
+        } catch (error) {
+            console.error("Get Current Error", error);
+            res.status(500).json({error: "Enternal Server Error", error});
+        }
+    }
 };
 module.exports = UserController;
