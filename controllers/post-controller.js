@@ -70,7 +70,24 @@ const PostController = {
         }
     },
     deletePost: async (req, res) => {
-        res.send("delete post");
+        const {id} = req.params;
+
+        const post = await prisma.post.findUnique({where: {id}});
+        if(!post) return res.status(404).json({error: "Пост не существует!"});
+        
+        if(post.authorId !== req.user.userId) return res.status(403).json({error: "Недостаточно прав!"});
+
+        try {
+            const transaction = await prisma.$transaction([
+                prisma.comments.deleteMany({where: {postId: id}}),
+                prisma.like.deleteMany({where: {postId: id}}),
+                prisma.post.delete({where: {id}})
+            ])
+            res.json(transaction);
+        } catch (error) {
+            console.error("Delete post error", error);
+            res.status(500).json({error: "Internal Server error", error});
+        }
     }
 }
 module.exports = PostController;
