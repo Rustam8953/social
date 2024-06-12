@@ -28,7 +28,7 @@ router.get('/posts/:id', authToken, PostController.getPostById);
 router.delete('/posts/:id', authToken, PostController.deletePost);
 
 //Comments routes
-router.post("/comments/:id", authToken, CommentsController.createComment);
+router.post("/comments", authToken, CommentsController.createComment);
 router.delete("/comments/:id", authToken, CommentsController.deleteComment);
 
 module.exports = router;

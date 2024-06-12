@@ -15,7 +15,7 @@ const PostController = {
             res.json(post);
         } catch (error) {
             console.error("Created post error", error);
-            res.status(500).json({error: "Internal server error", error});
+            res.status(500).json({error: "Internal server error"});
         }
     },
     getPostById: async (req, res) => {
@@ -66,7 +66,7 @@ const PostController = {
             res.json(postCurrentUser);
         } catch (error) {
             console.error("Get all post error", error);
-            res.status(500).json({error: "Internal server error", error});
+            res.status(500).json({error: "Internal server error"});
         }
     },
     deletePost: async (req, res) => {
@@ -86,7 +86,7 @@ const PostController = {
             res.json(transaction);
         } catch (error) {
             console.error("Delete post error", error);
-            res.status(500).json({error: "Internal Server error", error});
+            res.status(500).json({error: "Internal Server error"});
         }
     }
 }

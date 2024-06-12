@@ -143,7 +143,7 @@ const UserController = {
             res.json(user);
         } catch (error) {
             console.error("Get Current Error", error);
-            res.status(500).json({error: "Enternal Server Error", error});
+            res.status(500).json({error: "Enternal Server Error"});
         }
     }
 };
