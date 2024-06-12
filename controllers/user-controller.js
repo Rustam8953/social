@@ -28,7 +28,7 @@ const UserController = {
                     email,
                     password: hashPass,
                     name,
-                    avatarUrl: `/uploads/${pathAvatar}`
+                    avatarUrl: `/uploads/${avatarName}`
                 }
             })
             res.json(user);
