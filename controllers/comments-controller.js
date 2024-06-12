@@ -20,7 +20,22 @@ const CommentsController = {
         }
     },
     deleteComment: async(req, res) => {
-        res.send("Delete comment");
+        const {id} = req.params;
+        const userId = req.user.userId;
+
+        try {
+            const comment = await prisma.comments.findUnique({where: {id}})
+
+            if(!comment) return res.status(404).json({error: "Комментарий не найден"});
+
+            if(comment.userId !== userId) return res.status(403).json({error: "Нет доступа"});
+
+            await prisma.comments.delete({where: {id}});
+            res.json(comment);
+        } catch (error) {
+            console.error("Error delete comment", error);
+            res.status(500).json({error: "Internal server error"});
+        }
     }
 }
 module.exports = CommentsController;
