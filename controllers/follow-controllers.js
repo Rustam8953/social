@@ -29,7 +29,26 @@ const FollowController = {
         }
     },
     unfollow: async(req, res) => {
-        res.send("Unfollow user!");
+        const {followingId} = req.body;
+        const userId = req.user.userId;
+        try {
+            const follows = await prisma.follows.findFirst({
+                where: {
+                    AND: [
+                        {followerId: userId},
+                        {followingId}
+                    ]
+                }
+            })
+            if(!follows) return res.status(404).json({error: "Подписка не найдена!"});
+            await prisma.follows.delete({
+                where: {id: follows.id}
+            })
+            res.status(201).json({message: "Вы отписались!"});
+        } catch (error) {
+            console.error("Unfollow error", error);
+            res.status(500).json({error: "Internal server error"});
+        }
     }
 }
 module.exports = FollowController;
