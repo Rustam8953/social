@@ -5,10 +5,10 @@ services:
     ports: 
       - ${DOCKER_PORTS}
     depends_on:
-      - db
+      - db-1
     environment:
       DATABASE_URL: ${DOCKER_URL}
-  db:
+  db-1:
     image: prismagraphql/mongo-single-replica:5.0.3
     ports: 
       - "27017:27017"
