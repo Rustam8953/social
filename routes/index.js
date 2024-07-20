@@ -37,6 +37,6 @@ router.delete("/likes/:id", authToken, LikeController.unlikePost);
 
 //Follow routes
 router.post('/follow', authToken, FollowController.followUser);
-router.delete('/unfollow/:id', authToken, FollowController.unfollow);
+router.delete('/unfollow/:id', authToken, FollowController.unfollow)
 
 module.exports = router;
