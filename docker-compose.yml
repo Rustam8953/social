@@ -6,6 +6,7 @@ services:
       - ${DOCKER_PORTS}
     depends_on:
       - db-1
+      - react-app
     environment:
       DATABASE_URL: ${DOCKER_URL}
   db-1:
@@ -14,4 +15,8 @@ services:
       - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD} 
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+  react-app:
+    build: ../client
+    ports:
+      '80:80'
