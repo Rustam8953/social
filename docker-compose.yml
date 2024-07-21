@@ -17,6 +17,6 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
   react-app:
-    build: ../client
-    ports:
-      - '80:80'
+      build: ../client
+      ports:
+        - '8081:8081'
