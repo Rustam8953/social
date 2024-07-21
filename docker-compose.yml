@@ -19,4 +19,4 @@ services:
   react-app:
     build: ../client
     ports:
-      '80:80'
+      - '80:80'
